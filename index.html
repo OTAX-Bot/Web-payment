@@ -18,12 +18,7 @@
     }
     .neon-text {
       color: #f87171;
-      text-shadow:
-        0 0 10px #b91c1c,
-        0 0 20px #b91c1c,
-        0 0 30px #b91c1c,
-        0 0 40px #b91c1c90,
-        0 0 70px #b91c1c80;
+      text-shadow: 0 0 10px #b91c1c, 0 0 20px #b91c1c, 0 0 30px #b91c1c, 0 0 40px #b91c1c90, 0 0 70px #b91c1c80;
       letter-spacing: 2px;
       animation: neonflicker 3s infinite alternate;
     }
@@ -101,10 +96,46 @@
       border: 1.5px solid #fff;
       color: #fff;
     }
+    /* List jualan */
+    .list-jualan {
+      background: #18181b;
+      border-radius: 1.5rem;
+      box-shadow: 0 2px 32px #fa223420;
+      padding: 2rem 1.5rem;
+      margin-bottom: 2.5rem;
+      width: 100%;
+      max-width: 470px;
+    }
+    .list-jualan h2 {
+      color: #f87171;
+      text-shadow: 0 0 12px #b91c1c77;
+      font-size: 1.3rem;
+      font-weight: bold;
+      margin-bottom: 1rem;
+      letter-spacing: 1px;
+      text-align: center;
+    }
+    .list-jualan ul {
+      padding-left: 1.1rem;
+    }
+    .list-jualan li {
+      color: #fff;
+      font-size: 1.06rem;
+      margin-bottom: 0.7em;
+      border-left: 3px solid #fa2234;
+      padding-left: 0.7em;
+      line-height: 1.5;
+      background: #24242455;
+      border-radius: 0.3em;
+      transition: background .2s;
+    }
+    .list-jualan li:hover {
+      background: #b91c1c22;
+    }
   </style>
   <script>
     function copyDana() {
-      const dana = '081945938917'; // Ganti dengan nomor DANA-mu
+      const dana = '081945938917';
       navigator.clipboard.writeText(dana);
       const btn = document.getElementById('copy-btn');
       btn.innerText = 'Copied!';
@@ -113,6 +144,8 @@
   </script>
 </head>
 <body class="flex flex-col items-center justify-center px-4">
+  <!-- Musik Otomatis -->
+  <audio id="bg-music" src="https://cdn.pixabay.com/audio/2023/03/28/audio_12c8fb1e28.mp3" autoplay loop hidden></audio>
   <!-- Logo -->
   <img src="https://files.catbox.moe/qgvg8u.jpg" alt="OTAX Logo"
        class="w-24 mt-12 mb-5 rounded-2xl shadow-lg glow"
@@ -144,6 +177,61 @@
       <div class="text-xs mt-2 text-gray-400">Pastikan transfer ke nomor ini</div>
     </div>
   </div>
+<!-- Tambahkan di bawah card pembayaran -->
+
+<div class="w-full max-w-md mx-auto list-jualan">
+  <h2 class="mb-4">Produk Pilihan OTAX</h2>
+
+  <!-- SC OTAX -->
+  <button
+    onclick="toggleAccordion('scotax')"
+    class="w-full flex justify-between items-center px-5 py-3 mb-2 bg-[#2a2226] rounded-xl border border-[#fa2234] neon-text text-left focus:outline-none transition hover:bg-[#b91c1c33]"
+  >
+    <span>SC OTAX</span>
+    <svg id="icon-scotax" class="w-5 h-5 transition-transform" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+      <path stroke-linecap="round" stroke-linejoin="round" stroke-width="3" d="M19 9l-7 7-7-7" />
+    </svg>
+  </button>
+  <div id="panel-scotax" class="hidden bg-[#18181b] border-l-4 border-[#fa2234] px-6 py-4 mb-2 rounded-b-xl animate__animated animate__fadeInDown">
+    <ul class="text-white space-y-2 text-base">
+      <li>20 K - <span class="text-gray-300">No Up</span></li>
+      <li>40 K - <span class="text-gray-300">Free Up</span></li>
+      <li>50 K - <span class="text-gray-300">Reseller</span></li>
+    </ul>
+  </div>
+
+  <!-- PT OTAX -->
+  <button
+    onclick="toggleAccordion('ptotax')"
+    class="w-full flex justify-between items-center px-5 py-3 mb-2 bg-[#2a2226] rounded-xl border border-[#02bde3] neon-text text-left focus:outline-none transition hover:bg-[#02bde322]"
+  >
+    <span>PT OTAX</span>
+    <svg id="icon-ptotax" class="w-5 h-5 transition-transform" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+      <path stroke-linecap="round" stroke-linejoin="round" stroke-width="3" d="M19 9l-7 7-7-7" />
+    </svg>
+  </button>
+  <div id="panel-ptotax" class="hidden bg-[#18181b] border-l-4 border-[#02bde3] px-6 py-4 mb-2 rounded-b-xl animate__animated animate__fadeInDown">
+    <ul class="text-white space-y-2 text-base">
+      <li>60 K (PT OTAX/PT OTA)</li>
+      <li class="text-xs text-gray-300">All Benefit Bisa Langsung Ditanyakan Ke OTA</li>
+    </ul>
+  </div>
+</div>
+
+<!-- Script accordion sederhana -->
+<script>
+function toggleAccordion(id) {
+  const panel = document.getElementById('panel-' + id);
+  const icon = document.getElementById('icon-' + id);
+  const isHidden = panel.classList.contains('hidden');
+  document.querySelectorAll('[id^=panel-]').forEach(p => p.classList.add('hidden'));
+  document.querySelectorAll('[id^=icon-]').forEach(i => i.style.transform = 'rotate(0deg)');
+  if(isHidden) {
+    panel.classList.remove('hidden');
+    icon.style.transform = 'rotate(180deg)';
+  }
+}
+</script>
   <!-- Tombol Contact Developer Telegram -->
   <a href="https://t.me/Otapengenkawin" target="_blank" class="btn-tg mt-6">
     <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 496 512">
