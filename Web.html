@@ -1,0 +1,158 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <title>Web Pembayaran OTAX</title>
+  <meta name="viewport" content="width=device-width,initial-scale=1" />
+  <link href="https://cdn.jsdelivr.net/npm/tailwindcss@2.2.19/dist/tailwind.min.css" rel="stylesheet">
+  <style>
+    body {
+      min-height: 100vh;
+      background: linear-gradient(130deg, #09090b 0%, #45020c 100%);
+      font-family: 'Segoe UI', sans-serif;
+    }
+    .glow {
+      box-shadow: 0 0 32px 6px #b91c1c99, 0 0 2px #fff;
+      border: 2.5px solid #b91c1c;
+      animation: pulse 2.5s infinite;
+    }
+    .neon-text {
+      color: #f87171;
+      text-shadow:
+        0 0 10px #b91c1c,
+        0 0 20px #b91c1c,
+        0 0 30px #b91c1c,
+        0 0 40px #b91c1c90,
+        0 0 70px #b91c1c80;
+      letter-spacing: 2px;
+      animation: neonflicker 3s infinite alternate;
+    }
+    @keyframes pulse {
+      0%, 100% { box-shadow: 0 0 32px 8px #b91c1c66, 0 0 2px #fff; }
+      50%      { box-shadow: 0 0 64px 12px #f87171cc, 0 0 12px #fff; }
+    }
+    @keyframes neonflicker {
+      0%, 100% { opacity: 1; filter: brightness(1); }
+      70% { opacity: 0.93; filter: brightness(1.2);}
+      85% { opacity: 0.7;  filter: brightness(1.5);}
+    }
+    .paycard {
+      background: rgba(18,16,18,0.93);
+      border-radius: 1.7rem;
+      box-shadow: 0 2px 40px #b91c1c30;
+      transition: transform 0.14s, box-shadow 0.14s;
+    }
+    .paycard:hover {
+      transform: translateY(-8px) scale(1.03);
+      box-shadow: 0 8px 60px #fa223499, 0 0 24px #fa223455;
+    }
+    .qrbox {
+      background: linear-gradient(135deg,#1e1b20 60%,#333 100%);
+      padding: 1.2rem;
+      border-radius: 1.2rem;
+      box-shadow: 0 0 22px #2227;
+    }
+    .btn-tg {
+      background: linear-gradient(90deg,#b91c1c,#f87171);
+      color: #fff;
+      border-radius: 999px;
+      font-weight: 600;
+      padding: 0.75rem 2rem;
+      box-shadow: 0 2px 24px #b91c1c45;
+      transition: background 0.18s, box-shadow 0.18s, transform 0.18s;
+      border: none;
+      display: inline-flex;
+      align-items: center;
+      gap: 0.6em;
+      font-size: 1rem;
+      margin-top: 2.5rem;
+      cursor: pointer;
+      letter-spacing: 0.5px;
+      outline: none;
+    }
+    .btn-tg:hover {
+      background: linear-gradient(90deg,#d71c1c,#f43f5e);
+      box-shadow: 0 6px 32px #fa223485;
+      transform: scale(1.05) translateY(-2px);
+      text-decoration: none;
+      color: #fff;
+    }
+    .btn-tg svg {
+      width: 22px;
+      height: 22px;
+      margin-right: 0.25em;
+      vertical-align: middle;
+      fill: #fff;
+    }
+    .copy-btn {
+      background: #18181b;
+      border: 1.2px solid #f87171;
+      color: #fff;
+      padding: 0.45rem 1.2rem;
+      border-radius: 999px;
+      margin-top: 1em;
+      cursor: pointer;
+      font-size: 0.98em;
+      font-weight: 500;
+      transition: background 0.13s, border 0.13s;
+    }
+    .copy-btn:hover {
+      background: #f87171;
+      border: 1.5px solid #fff;
+      color: #fff;
+    }
+  </style>
+  <script>
+    function copyDana() {
+      const dana = '081945938917'; // Ganti dengan nomor DANA-mu
+      navigator.clipboard.writeText(dana);
+      const btn = document.getElementById('copy-btn');
+      btn.innerText = 'Copied!';
+      setTimeout(() => btn.innerText = 'SALIN NOMOR DANA', 1400);
+    }
+  </script>
+</head>
+<body class="flex flex-col items-center justify-center px-4">
+  <!-- Logo -->
+  <img src="https://files.catbox.moe/qgvg8u.jpg" alt="OTAX Logo"
+       class="w-24 mt-12 mb-5 rounded-2xl shadow-lg glow"
+       style="background:#111;" />
+  <!-- Judul -->
+  <h1 class="text-3xl font-bold neon-text mb-2 text-center select-none">WEB PEMBAYARAN OTAX</h1>
+  <div class="mb-8 text-sm text-gray-300 text-center tracking-wide">Ini Web Payment<span class="mx-1">&bull;</span> Bukan <span class="mx-1">&bull;</span> Web Bokep</div>
+  <!-- Payment Card -->
+  <div class="paycard flex flex-col md:flex-row gap-8 p-6 md:p-10 items-center mb-6">
+    <!-- QRIS -->
+    <div class="flex flex-col items-center">
+      <div class="text-lg font-semibold text-[#fa2234] mb-2 tracking-wider neon-text" style="color:#fa2234;text-shadow:0 0 14px #fa2234cc;">QRIS OTAX</div>
+      <div class="qrbox">
+        <img src="https://files.catbox.moe/z3v74n.jpg"
+             alt="QRIS QR"
+             class="w-40 h-40 rounded-xl border-4 border-[#fa2234] bg-white" />
+      </div>
+      <div class="text-xs mt-2 text-gray-400">Scan Qris lalu kirimkan bukti ke OTA</div>
+    </div>
+    <!-- Divider -->
+    <div class="hidden md:block w-px h-40 bg-gradient-to-b from-red-700 via-black to-red-700 mx-4"></div>
+    <!-- Nomor DANA -->
+    <div class="flex flex-col items-center justify-center">
+      <div class="text-lg font-semibold text-[#02bde3] mb-3 tracking-wider neon-text" style="color:#02bde3;text-shadow:0 0 14px #02bde3cc;">DANA (Nomor)</div>
+      <div class="text-2xl font-mono font-bold text-white bg-[#1a1a1a] rounded-xl px-5 py-2 mb-2 border-2 border-[#02bde3] select-all">
+        081945938917
+      </div>
+      <button id="copy-btn" class="copy-btn" onclick="copyDana()">SALIN NOMOR DANA</button>
+      <div class="text-xs mt-2 text-gray-400">Pastikan transfer ke nomor ini</div>
+    </div>
+  </div>
+  <!-- Tombol Contact Developer Telegram -->
+  <a href="https://t.me/Otapengenkawin" target="_blank" class="btn-tg mt-6">
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 496 512">
+      <path d="M248,8C111.033,8,0,119.033,0,256s111.033,248,248,248,248-111.033,248-248S384.967,8,248,8Zm104,372.114c-4.041,16.249-36.874,32.155-101.822,32.155-66.148,0-117.854-15.918-122.137-32.167-4.174-15.974,40.378-32.174,101.821-32.174C311.304,347.927,360.09,363.959,352,380.114ZM248,350.365c-56.801,0-103.36-9.169-103.36-20.467,0-11.317,46.559-20.487,103.36-20.487s103.36,9.17,103.36,20.487C351.36,341.196,304.801,350.365,248,350.365Zm120.648-93.8c0,10.374-46.664,19.646-104.146,19.646s-104.146-9.271-104.146-19.646c0-10.361,46.664-19.633,104.146-19.633S368.648,246.204,368.648,256.565Zm-40.133-61.176c0,8.544-34.872,15.475-77.815,15.475s-77.815-6.931-77.815-15.475c0-8.56,34.872-15.494,77.815-15.494S328.515,186.829,328.515,195.389Z"/>
+    </svg>
+    Contact Developer
+  </a>
+  <div class="mt-6 mb-6 text-xs text-gray-500 text-center select-none">
+    &copy; 2025 <span class="text-red-600 font-bold">OTAX</span> • All Rights Reserved.
+  </div>
+</body>
+</html>
